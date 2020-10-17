@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/Aziull/Almost-social-network/precache-manifest.c102269c8352dd0e69eab4b1ab235362.js"
+  "/Aziull/Almost-social-network/precache-manifest.95256049e9303db140d79e7205326041.js"
 );
 
 self.addEventListener('message', (event) => {
