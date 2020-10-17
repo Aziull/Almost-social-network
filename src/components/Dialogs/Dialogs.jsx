@@ -2,37 +2,39 @@ import React from 'react'
 import s from './Dialogs.module.css'
 import DialogItem from './DialogItem/DialogItem'
 import Messages from './Messages/Messages'
-import { render } from '@testing-library/react'
+import { Field, reduxForm } from 'redux-form'
+import {Textarea} from '../Common/FormsControls/FormsControls'
+import { maxLengthCreator, required } from '../../utils/validators/validators'
+
+
+const Dialogs = (props) => {
+
  
-class Dialogs extends React.Component{
-    constructor(props){
-        super(props)
-        
+    const addMessage = (value) => {
+        props.addMessage(value.newMessageText)
     }
-    addMessage = () =>{
-        this.props.addMessage()
-    }
-    onMessageChange = (e) => {
-        let text = e.target.value
-        this.props.updateNewMessageText(text)
-    }
- 
-render(){
-    let dialogsArray = this.props.dialogsPage.dialogs.map(elem => <DialogItem name={elem.name} id={elem.id} key={elem.id} />)
-    let messagesArray = this.props.dialogsPage.messages.map(elem => <Messages message={elem.message} key={elem.id}/>)
-     return  <div className={s.dialogs}>
+        let dialogsArray = props.dialogsPage.dialogs.map(elem => <DialogItem name={elem.name} id={elem.id} key={elem.id} />)
+        let messagesArray = props.dialogsPage.messages.map(elem => <Messages message={elem.message} key={elem.id} />)
+
+        return <div className={s.dialogs}>
             <div className={s.dialogsItems}>
                 {dialogsArray}
             </div>
             <div className={s.messages}>
                 {messagesArray}
-                <textarea onChange={this.onMessageChange} value={this.props.newMessageText} placeholder="введи шось"/> <br/>
-                <button onClick={this.addMessage}>Add Message</button>
+                <AddMessageFormRedux onSubmit={addMessage} />
             </div>
         </div>
-    
+
+
 }
-   
+ let maxLength10 = maxLengthCreator(10)
+const AddMessageForm = (props) => {
+    return <form onSubmit={props.handleSubmit}>
+        <Field component={Textarea} validate={[required,maxLength10]} name='newMessageText' placeholder="введи шось" /> 
+        <button >Add Message</button>
+    </form>
 }
+const AddMessageFormRedux = reduxForm({ form: 'dialogAddMessageForm' })(AddMessageForm)
 
 export default Dialogs;
